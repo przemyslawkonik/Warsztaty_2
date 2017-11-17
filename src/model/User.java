@@ -1,5 +1,7 @@
 package model;
 
+import java.sql.Connection;
+
 public class User {
 	private long id;
 	private String username;
@@ -13,6 +15,13 @@ public class User {
 		this.email = email;
 		this.password = password;
 		this.userGroupId = 0;
+	}
+
+	public void save(Connection conn) {
+		if (this.id == 0) {
+			String sql = "INSERT INTO users(username, email, password, user_group_id) " + "VALUES(?, ?, ?, ?)";
+			
+		}
 	}
 
 	public String getUsername() {
