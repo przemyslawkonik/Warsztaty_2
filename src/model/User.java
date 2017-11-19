@@ -68,7 +68,7 @@ public class User {
 
 	public void save(Connection conn) throws SQLException {
 		if (id == 0) {
-			String sql = "INSERT INTO users(username, email, password, user_group_id) " + "VALUES(?, ?, ?, ?)";
+			String sql = "INSERT INTO users(username, email, password, user_group_id) VALUES(?, ?, ?, ?)";
 			String[] generatedColumns = { "id" };
 			PreparedStatement ps = conn.prepareStatement(sql, generatedColumns);
 			ps.setString(1, username);
