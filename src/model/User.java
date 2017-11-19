@@ -45,6 +45,26 @@ public class User {
 		return users;
 	}
 
+	public static List<User> loadAllByGroupId(Connection conn, int userGroupId) throws SQLException {
+		List<User> users = new ArrayList<>();
+		String sql = "SELECT * FROM users WHERE user_group_id=?";
+		PreparedStatement ps = conn.prepareStatement(sql);
+		ps.setInt(1, userGroupId);
+		ResultSet rs = ps.executeQuery();
+		while (rs.next()) {
+			User loadedUser = new User();
+			loadedUser.id = rs.getLong("id");
+			loadedUser.username = rs.getString("username");
+			loadedUser.email = rs.getString("email");
+			loadedUser.password = rs.getString("password");
+			loadedUser.userGroupId = rs.getInt("user_group_id");
+			users.add(loadedUser);
+		}
+		ps.close();
+		rs.close();
+		return users;
+	}
+
 	public static User loadById(Connection conn, long id) throws SQLException {
 		String sql = "SELECT * FROM users WHERE id=?";
 		PreparedStatement ps = conn.prepareStatement(sql);
