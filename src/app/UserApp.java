@@ -25,9 +25,7 @@ public class UserApp {
 				}
 				case "edit": {
 					System.out.println("\nEdit user menu");
-					System.out.print("Insert id of user that you want to edit: ");
-					long id = scan.nextLong();
-					User u = User.loadById(conn, id);
+					User u = getUserById(conn, scan);
 					u.copy(getUserData(scan));
 					u.save(conn);
 					System.out.println("\nUser has been edited succesfully!");
@@ -35,9 +33,7 @@ public class UserApp {
 				}
 				case "delete": {
 					System.out.println("\nDelete user menu");
-					System.out.print("Insert id of user that you want to delete: ");
-					long id = scan.nextLong();
-					User u = User.loadById(conn, id);
+					User u = getUserById(conn, scan);
 					u.delete(conn);
 					System.out.println("\nUser has been deleted succesfully!");
 					break;
@@ -51,6 +47,12 @@ public class UserApp {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private static User getUserById(Connection conn, Scanner scan) throws SQLException {
+		System.out.print("Insert user id: ");
+		long id = scan.nextLong();
+		return User.loadById(conn, id);
 	}
 
 	private static User getUserData(Scanner scan) {
