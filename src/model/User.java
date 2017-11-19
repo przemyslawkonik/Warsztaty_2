@@ -126,6 +126,13 @@ public class User {
 		}
 	}
 
+	public void copy(User user) {
+		this.username = user.username;
+		this.email = user.email;
+		this.password = user.password;
+		this.userGroupId = user.userGroupId;
+	}
+
 	public String getUsername() {
 		return username;
 	}
