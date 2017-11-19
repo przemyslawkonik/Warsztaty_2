@@ -26,6 +26,27 @@ public class Solution {
 		this.userId = userId;
 	}
 
+	public static List<Solution> loadAllByUserId(Connection conn, long userId) throws SQLException {
+		List<Solution> solutions = new ArrayList<>();
+		String sql = "SELECT * FROM solution WHERE users_id=?";
+		PreparedStatement ps = conn.prepareStatement(sql);
+		ps.setLong(1, userId);
+		ResultSet rs = ps.executeQuery();
+		while (rs.next()) {
+			Solution loadedSolution = new Solution();
+			loadedSolution.id = rs.getInt("id");
+			loadedSolution.created = rs.getString("created");
+			loadedSolution.updated = rs.getString("updated");
+			loadedSolution.description = rs.getString("description");
+			loadedSolution.excerciseId = rs.getInt("excercise_id");
+			loadedSolution.userId = rs.getLong("users_id");
+			solutions.add(loadedSolution);
+		}
+		ps.close();
+		rs.close();
+		return solutions;
+	}
+
 	public static List<Solution> loadAll(Connection conn) throws SQLException {
 		List<Solution> solutions = new ArrayList<>();
 		String sql = "SELECT * FROM solution";
