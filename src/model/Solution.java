@@ -47,6 +47,27 @@ public class Solution {
 		return solutions;
 	}
 
+	public static List<Solution> loadAllByExcerciseId(Connection conn, int excerciseId) throws SQLException {
+		List<Solution> solutions = new ArrayList<>();
+		String sql = "SELECT * FROM solution WHERE excercise_id=? ORDER BY created DESC";
+		PreparedStatement ps = conn.prepareStatement(sql);
+		ps.setInt(1, excerciseId);
+		ResultSet rs = ps.executeQuery();
+		while (rs.next()) {
+			Solution loadedSolution = new Solution();
+			loadedSolution.id = rs.getInt("id");
+			loadedSolution.created = rs.getString("created");
+			loadedSolution.updated = rs.getString("updated");
+			loadedSolution.description = rs.getString("description");
+			loadedSolution.excerciseId = rs.getInt("excercise_id");
+			loadedSolution.userId = rs.getLong("users_id");
+			solutions.add(loadedSolution);
+		}
+		ps.close();
+		rs.close();
+		return solutions;
+	}
+
 	public static List<Solution> loadAll(Connection conn) throws SQLException {
 		List<Solution> solutions = new ArrayList<>();
 		String sql = "SELECT * FROM solution";
