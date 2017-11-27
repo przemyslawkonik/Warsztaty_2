@@ -11,7 +11,7 @@ CREATE TABLE users(
 	password VARCHAR(245),
 	user_group_id INT,
 	PRIMARY KEY(id),
-	FOREIGN KEY(user_group_id) REFERENCES user_group(id)
+	FOREIGN KEY(user_group_id) REFERENCES user_group(id) ON DELETE CASCADE
 );
 
 CREATE TABLE excercise(
@@ -29,6 +29,6 @@ CREATE TABLE solution(
 	excercise_id INT,
 	users_id BIGINT,
 	PRIMARY KEY(id),
-	FOREIGN KEY(excercise_id) REFERENCES excercise(id),
-	FOREIGN KEY(users_id) REFERENCES users(id)
+	FOREIGN KEY(excercise_id) REFERENCES excercise(id) ON DELETE CASCADE,
+	FOREIGN KEY(users_id) REFERENCES users(id) ON DELETE CASCADE
 );
