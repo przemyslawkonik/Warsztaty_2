@@ -23,7 +23,7 @@ CREATE TABLE excercise(
 
 CREATE TABLE solution(
 	id INT AUTO_INCREMENT,
-	created DATETIME,
+	created DATETIME DEFAULT NOW(),
 	updated DATETIME,
 	description TEXT,
 	excercise_id INT,
