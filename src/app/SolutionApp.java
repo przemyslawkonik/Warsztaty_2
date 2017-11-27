@@ -36,7 +36,8 @@ public class SolutionApp {
 					System.out.println("\nList of users (id, username, email, userGroupId):");
 					printAllUsers(conn);
 					User u = getUserById(conn, scan);
-					System.out.println("\nAll of " + u.getUsername() + " solutions:");
+					System.out.println("\nAll of " + u.getUsername()
+							+ " solutions (id, created, updated, description, excercise_id, users_id):");
 					printAllSolutionByUserId(conn, u.getId());
 					break;
 				}
@@ -78,7 +79,7 @@ public class SolutionApp {
 	private static void printAllSolutionByUserId(Connection conn, long id) throws SQLException {
 		for (Solution s : Solution.loadAllByUserId(conn, id)) {
 			System.out.println(s.getId() + " | " + s.getCreated() + " | " + s.getUpdated() + " | " + s.getDescription()
-					+ s.getExcerciseId() + " | " + s.getUserId());
+					+ " | " + s.getExcerciseId() + " | " + s.getUserId());
 		}
 	}
 
