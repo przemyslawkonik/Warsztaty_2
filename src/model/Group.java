@@ -86,6 +86,10 @@ public class Group {
 		}
 	}
 
+	public void copy(Group g) {
+		this.name = g.name;
+	}
+
 	public String getName() {
 		return name;
 	}
