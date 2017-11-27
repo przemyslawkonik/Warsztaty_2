@@ -91,6 +91,11 @@ public class Excercise {
 			id = 0;
 		}
 	}
+	
+	public void copy(Excercise e) {
+		this.title = e.title;
+		this.description = e.description;
+	}
 
 	public String getTitle() {
 		return title;
