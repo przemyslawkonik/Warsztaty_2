@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import db.DbUtil;
 import db.Operation;
 import db.PsUtil;
 import db.Query;
@@ -26,8 +27,7 @@ public class Group {
 		PreparedStatement ps = conn.prepareStatement(Query.selectAllGroups());
 		ResultSet rs = ps.executeQuery();
 		List<Group> groups = load(rs);
-		ps.close();
-		rs.close();
+		DbUtil.closeAll(ps, rs);
 		return groups;
 	}
 
@@ -36,8 +36,7 @@ public class Group {
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
 		List<Group> groups = load(rs);
-		ps.close();
-		rs.close();
+		DbUtil.closeAll(ps, rs);
 		return groups.get(0);
 	}
 
@@ -48,8 +47,7 @@ public class Group {
 			ps.executeUpdate();
 			ResultSet rs = ps.getGeneratedKeys();
 			synchronizeId(rs);
-			rs.close();
-			ps.close();
+			DbUtil.closeAll(ps, rs);
 		} else {
 			PreparedStatement ps = conn.prepareStatement(Query.updateGroup());
 			PsUtil.prepare(ps, Operation.UPDATE, this);

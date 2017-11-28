@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import db.DbUtil;
 import org.mindrot.jbcrypt.BCrypt;
 
 import db.Operation;
@@ -34,8 +35,7 @@ public class User {
 		PreparedStatement ps = conn.prepareStatement(Query.selectAllUsers());
 		ResultSet rs = ps.executeQuery();
 		List<User> users = load(rs);
-		ps.close();
-		rs.close();
+		DbUtil.closeAll(ps, rs);
 		return users;
 	}
 
@@ -44,8 +44,7 @@ public class User {
 		ps.setInt(1, userGroupId);
 		ResultSet rs = ps.executeQuery();
 		List<User> users = load(rs);
-		ps.close();
-		rs.close();
+		DbUtil.closeAll(ps, rs);
 		return users;
 	}
 
@@ -54,8 +53,7 @@ public class User {
 		ps.setLong(1, id);
 		ResultSet rs = ps.executeQuery();
 		List<User> users = load(rs);
-		ps.close();
-		rs.close();
+		DbUtil.closeAll(ps, rs);
 		return users.get(0);
 	}
 
@@ -66,8 +64,7 @@ public class User {
 			ps.executeUpdate();
 			ResultSet rs = ps.getGeneratedKeys();
 			synchronizeId(rs);
-			rs.close();
-			ps.close();
+			DbUtil.closeAll(ps, rs);
 		} else {
 			PreparedStatement ps = conn.prepareStatement(Query.updateUser());
 			PsUtil.prepare(ps, Operation.UPDATE, this);

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import db.DbUtil;
 import db.Operation;
 import db.PsUtil;
 import db.Query;
@@ -28,8 +29,7 @@ public class Excercise {
 		PreparedStatement ps = conn.prepareStatement(Query.selectAllExcercises());
 		ResultSet rs = ps.executeQuery();
 		List<Excercise> excercises = load(rs);
-		ps.close();
-		rs.close();
+		DbUtil.closeAll(ps, rs);
 		return excercises;
 	}
 
@@ -38,8 +38,7 @@ public class Excercise {
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
 		List<Excercise> excercises = load(rs);
-		ps.close();
-		rs.close();
+		DbUtil.closeAll(ps, rs);
 		return excercises.get(0);
 	}
 
@@ -50,8 +49,7 @@ public class Excercise {
 			ps.executeUpdate();
 			ResultSet rs = ps.getGeneratedKeys();
 			synchronizeId(rs);
-			rs.close();
-			ps.close();
+			DbUtil.closeAll(ps, rs);
 		} else {
 			PreparedStatement ps = conn.prepareStatement(Query.updateExcercise());
 			PsUtil.prepare(ps, Operation.UPDATE, this);

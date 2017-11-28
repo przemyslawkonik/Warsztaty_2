@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.Date;
 
 import org.joda.time.DateTime;
@@ -21,4 +23,9 @@ public class DbUtil {
 	public static String convert(DateTime dt) {
 		return new Timestamp(dt.getMillis()).toString();
 	}
+
+	public static void closeAll(PreparedStatement ps, ResultSet rs) throws SQLException {
+	    ps.close();
+	    rs.close();
+    }
 }

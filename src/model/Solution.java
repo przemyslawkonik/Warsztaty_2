@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import db.DbUtil;
 import db.Operation;
 import db.PsUtil;
 import db.Query;
@@ -35,8 +36,7 @@ public class Solution {
 		ps.setLong(1, userId);
 		ResultSet rs = ps.executeQuery();
 		List<Solution> solutions = load(rs);
-		ps.close();
-		rs.close();
+		DbUtil.closeAll(ps, rs);
 		return solutions;
 	}
 	
@@ -56,8 +56,7 @@ public class Solution {
 		ps.setInt(1, excerciseId);
 		ResultSet rs = ps.executeQuery();
 		List<Solution> solutions = load(rs);
-		ps.close();
-		rs.close();
+		DbUtil.closeAll(ps, rs);
 		return solutions;
 	}
 
@@ -65,8 +64,7 @@ public class Solution {
 		PreparedStatement ps = conn.prepareStatement(Query.selectAllSolutions());
 		ResultSet rs = ps.executeQuery();
 		List<Solution> solutions = load(rs);
-		ps.close();
-		rs.close();
+		DbUtil.closeAll(ps, rs);
 		return solutions;
 	}
 
@@ -75,8 +73,7 @@ public class Solution {
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
 		List<Solution> solutions = load(rs);
-		ps.close();
-		rs.close();
+		DbUtil.closeAll(ps, rs);
 		return solutions.get(0);
 	}
 
@@ -87,8 +84,7 @@ public class Solution {
 			ps.executeUpdate();
 			ResultSet rs = ps.getGeneratedKeys();
 			synchronizeId(rs);
-			rs.close();
-			ps.close();
+			DbUtil.closeAll(ps, rs);
 		} else {
 			PreparedStatement ps = conn.prepareStatement(Query.updateSolution());
 			PsUtil.prepare(ps, Operation.UPDATE, this);
