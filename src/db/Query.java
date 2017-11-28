@@ -22,7 +22,7 @@ public class Query {
 		return "SELECT * FROM users WHERE user_group_id=?";
 	}
 
-	public static String selectAllUsersById() {
+	public static String selectUserById() {
 		return "SELECT * FROM users WHERE id=?";
 	}
 
@@ -42,7 +42,7 @@ public class Query {
 		return "SELECT * FROM user_group";
 	}
 
-	public static String selectAllGroupsById() {
+	public static String selectGroupById() {
 		return "SELECT * FROM user_group WHERE id=?";
 	}
 }
