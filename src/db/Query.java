@@ -45,4 +45,24 @@ public class Query {
 	public static String selectGroupById() {
 		return "SELECT * FROM user_group WHERE id=?";
 	}
+
+	public static String insertExcercise() {
+		return "INSERT INTO excercise(title, description) VALUES(?, ?)";
+	}
+
+	public static String updateExcercise() {
+		return "UPDATE excercise SET title=?, description=? WHERE id=?";
+	}
+
+	public static String deleteExcercise() {
+		return "DELETE FROM excercise WHERE id=?";
+	}
+
+	public static String selectAllExcercises() {
+		return "SELECT * FROM excercise";
+	}
+
+	public static String selectExcerciseById() {
+		return "SELECT * FROM excercise WHERE id=?";
+	}
 }
