@@ -50,7 +50,7 @@ public class User {
 	}
 
 	public static User loadById(Connection conn, long id) throws SQLException {
-		PreparedStatement ps = conn.prepareStatement(Query.selectAllUsersById());
+		PreparedStatement ps = conn.prepareStatement(Query.selectUserById());
 		ps.setLong(1, id);
 		ResultSet rs = ps.executeQuery();
 		List<User> users = load(rs);
