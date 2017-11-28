@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 import db.DbUtil;
+import io.Input;
+import io.Output;
 import model.Excercise;
 import model.Solution;
 import model.User;
@@ -20,12 +22,12 @@ public class SolutionApp {
 				case "add": {
 					System.out.println("\nAdd solution menu");
 					System.out.println("\nList of users (id, username, email, userGroupId):");
-					printAllUsers(conn);
-					User u = getUserById(conn, scan);
+					Output.printAllUsers(conn);
+					User u = Input.getUserById(conn, scan);
 
 					System.out.println("\nList of excercises (id, title, description):");
-					printAllExcercises(conn);
-					Excercise e = getExcerciseById(conn, scan);
+					Output.printAllExcercises(conn);
+					Excercise e = Input.getExcerciseById(conn, scan);
 
 					Solution s = new Solution(MyDate.get(), null, null, e.getId(), u.getId());
 					s.save(conn);
@@ -35,11 +37,11 @@ public class SolutionApp {
 				case "view": {
 					System.out.println("\nView solution menu");
 					System.out.println("\nList of users (id, username, email, userGroupId):");
-					printAllUsers(conn);
-					User u = getUserById(conn, scan);
+					Output.printAllUsers(conn);
+					User u = Input.getUserById(conn, scan);
 					System.out.println("\nAll of " + u.getUsername()
 							+ " solutions (id, created, updated, description, excercise_id, users_id):");
-					printAllSolutionByUserId(conn, u.getId());
+					Output.printAllSolutionByUserId(conn, u.getId());
 					break;
 				}
 				case "quit": {
@@ -50,37 +52,6 @@ public class SolutionApp {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
-	}
-
-	private static User getUserById(Connection conn, Scanner scan) throws SQLException {
-		System.out.print("Insert user id: ");
-		long id = scan.nextLong();
-		return User.loadById(conn, id);
-	}
-
-	private static Excercise getExcerciseById(Connection conn, Scanner scan) throws SQLException {
-		System.out.print("Insert excercise id: ");
-		int id = scan.nextInt();
-		return Excercise.loadById(conn, id);
-	}
-
-	private static void printAllUsers(Connection conn) throws SQLException {
-		for (User u : User.loadAll(conn)) {
-			System.out.println(u.getId() + " | " + u.getUsername() + " | " + u.getEmail() + " | " + u.getUserGroupId());
-		}
-	}
-
-	private static void printAllExcercises(Connection conn) throws SQLException {
-		for (Excercise e : Excercise.loadAll(conn)) {
-			System.out.println(e.getId() + " | " + e.getTitle() + " | " + e.getDescription());
-		}
-	}
-
-	private static void printAllSolutionByUserId(Connection conn, long id) throws SQLException {
-		for (Solution s : Solution.loadAllByUserId(conn, id)) {
-			System.out.println(s.getId() + " | " + s.getCreated() + " | " + s.getUpdated() + " | " + s.getDescription()
-					+ " | " + s.getExcerciseId() + " | " + s.getUserId());
 		}
 	}
 

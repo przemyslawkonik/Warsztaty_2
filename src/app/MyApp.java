@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 import db.DbUtil;
+import io.Input;
+import io.Output;
 import model.Solution;
 import model.User;
 import tool.MyDate;
@@ -27,10 +29,10 @@ public class MyApp {
 				case "add": {
 					System.out.println("\nAll of " + u.getUsername()
 							+ " unresolved solutions (id, created, updated, description, excercise_id, users_id):");
-					int i = printAllUnresolvedSolutionByUserId(conn, u.getId());
+					int i = Output.printAllUnresolvedSolutionByUserId(conn, u.getId());
 					if (i > 0) {
-						Solution s = getSolutionById(conn, scan);
-						String desc = getSolutionDescription(scan);
+						Solution s = Input.getSolutionById(conn, scan);
+						String desc = Input.getSolutionDescription(scan);
 						s.setDescription(desc);
 						s.setUpdated(MyDate.get());
 						s.save(conn);
@@ -40,7 +42,7 @@ public class MyApp {
 				case "view": {
 					System.out.println("\nAll of " + u.getUsername()
 							+ " solutions (id, created, updated, description, excercise_id, users_id):");
-					printAllSolutionByUserId(conn, u.getId());
+					Output.printAllSolutionByUserId(conn, u.getId());
 					break;
 				}
 				case "quit": {
@@ -51,37 +53,6 @@ public class MyApp {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
-
-	private static void printAllSolutionByUserId(Connection conn, long id) throws SQLException {
-		for (Solution s : Solution.loadAllByUserId(conn, id)) {
-			System.out.println(s.getId() + " | " + s.getCreated() + " | " + s.getUpdated() + " | " + s.getDescription()
-					+ " | " + s.getExcerciseId() + " | " + s.getUserId());
-		}
-	}
-
-	private static int printAllUnresolvedSolutionByUserId(Connection conn, long id) throws SQLException {
-		int counter = 0;
-		for (Solution s : Solution.loadAllByUserId(conn, id)) {
-			if (s.getDescription() == null) {
-				System.out.println(s.getId() + " | " + s.getCreated() + " | " + s.getUpdated() + " | "
-						+ s.getDescription() + " | " + s.getExcerciseId() + " | " + s.getUserId());
-				counter++;
-			}
-		}
-		return counter;
-	}
-
-	private static Solution getSolutionById(Connection conn, Scanner scan) throws SQLException {
-		System.out.print("Insert solution id: ");
-		int id = scan.nextInt();
-		return Solution.loadById(conn, id);
-	}
-
-	private static String getSolutionDescription(Scanner scan) {
-		System.out.print("Insert your solution: ");
-		String desc = scan.next();
-		return desc;
 	}
 
 }
