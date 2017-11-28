@@ -65,9 +65,7 @@ public class User {
 			PsUtil.prepare(ps, Operation.INSERT, this);
 			ps.executeUpdate();
 			ResultSet rs = ps.getGeneratedKeys();
-			if (rs.next()) {
-				id = rs.getLong(1);
-			}
+			synchronizeId(rs);
 			rs.close();
 			ps.close();
 		} else {
@@ -107,6 +105,12 @@ public class User {
 			users.add(u);
 		}
 		return users;
+	}
+
+	private void synchronizeId(ResultSet rs) throws SQLException {
+		if (rs.next()) {
+			id = rs.getLong(1);
+		}
 	}
 
 	public String getUsername() {

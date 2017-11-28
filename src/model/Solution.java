@@ -75,9 +75,7 @@ public class Solution {
 			PsUtil.prepare(ps, Operation.INSERT, this);
 			ps.executeUpdate();
 			ResultSet rs = ps.getGeneratedKeys();
-			if (rs.next()) {
-				id = rs.getInt(1);
-			}
+			synchronizeId(rs);
 			rs.close();
 			ps.close();
 		} else {
@@ -111,6 +109,12 @@ public class Solution {
 			solutions.add(s);
 		}
 		return solutions;
+	}
+
+	private void synchronizeId(ResultSet rs) throws SQLException {
+		if (rs.next()) {
+			id = rs.getInt(1);
+		}
 	}
 
 	public String getCreated() {

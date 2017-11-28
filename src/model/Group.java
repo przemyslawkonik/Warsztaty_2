@@ -47,9 +47,7 @@ public class Group {
 			PsUtil.prepare(ps, Operation.INSERT, this);
 			ps.executeUpdate();
 			ResultSet rs = ps.getGeneratedKeys();
-			if (rs.next()) {
-				id = rs.getInt(1);
-			}
+			synchronizeId(rs);
 			rs.close();
 			ps.close();
 		} else {
@@ -83,6 +81,12 @@ public class Group {
 			groups.add(g);
 		}
 		return groups;
+	}
+
+	private void synchronizeId(ResultSet rs) throws SQLException {
+		if (rs.next()) {
+			id = rs.getInt(1);
+		}
 	}
 
 	public String getName() {
