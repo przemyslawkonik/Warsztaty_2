@@ -65,4 +65,32 @@ public class Query {
 	public static String selectExcerciseById() {
 		return "SELECT * FROM excercise WHERE id=?";
 	}
+	
+	public static String insertSolution() {
+		return "INSERT INTO solution(created, updated, description, excercise_id, users_id) VALUES(?, ?, ?, ?, ?)";
+	}
+	
+	public static String updateSolution() {
+		return "UPDATE solution SET created=?, updated=?, description=? excercise_id=?, user_id=? WHERE id=?";
+	}
+	
+	public static String deleteSolution() {
+		return "DELETE FROM solution WHERE id=?";
+	}
+	
+	public static String selectAllSolutions() {
+		return "SELECT * FROM solution";
+	}
+	
+	public static String selectSolutionById() {
+		return "SELECT * FROM solution WHERE id=?";
+	}
+	
+	public static String selectAllSolutionsByUserId() {
+		return "SELECT * FROM solution WHERE users_id=?";
+	}
+	
+	public static String selectAllSolutionsByExcerciseId() {
+		return "SELECT * FROM solution WHERE excercise_id=? ORDER BY created DESC";
+	}
 }
