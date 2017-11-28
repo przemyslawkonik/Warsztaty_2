@@ -1,72 +1,76 @@
 package io;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Scanner;
 
 import model.Excercise;
 import model.Group;
-import model.Solution;
 import model.User;
 
 public class Input {
 
-	public static User getUserById(Connection conn, Scanner scan) throws SQLException {
-		System.out.print("Insert user id: ");
-		long id = scan.nextLong();
-		return User.loadById(conn, id);
+	public static Scanner getScannerInstance() {
+		return new Scanner(System.in);
 	}
 
-	public static User getUser(Scanner scan) {
-		System.out.print("Insert username: ");
-		String username = scan.next();
-		System.out.print("Insert email: ");
-		String email = scan.next();
-		System.out.print("Insert password: ");
-		String password = scan.next();
-		System.out.print("Insert user group id: ");
-		int userGroupId = scan.nextInt();
+	public static String get() {
+		return getScannerInstance().next();
+	}
 
+	public static String getLine() {
+		return getScannerInstance().nextLine();
+	}
+
+	public static long getLong() {
+		return getScannerInstance().nextLong();
+	}
+
+	public static int getInt() {
+		return getScannerInstance().nextInt();
+	}
+
+	public static long getUserId() {
+		System.out.print("Insert user id: ");
+		return Input.getLong();
+	}
+
+	public static User getUser() {
+		System.out.print("Insert username: ");
+		String username = Input.get();
+		System.out.print("Insert email: ");
+		String email = Input.get();
+		System.out.print("Insert password: ");
+		String password = Input.get();
+		System.out.print("Insert user group id: ");
+		int userGroupId = Input.getInt();
 		return new User(username, email, password, userGroupId);
 	}
 
-	public static Group getGroupById(Connection conn, Scanner scan) throws SQLException {
+	public static int getGroupId() {
 		System.out.print("Insert group id: ");
-		int id = scan.nextInt();
-		return Group.loadById(conn, id);
+		return Input.getInt();
 	}
 
-	public static Group getGroup(Scanner scan) {
+	public static Group getGroup() {
 		System.out.print("Insert name: ");
-		String name = scan.next();
-
-		return new Group(name);
+		return new Group(Input.get());
 	}
 
-	public static Excercise getExcerciseById(Connection conn, Scanner scan) throws SQLException {
+	public static int getExcerciseId() {
 		System.out.print("Insert excercise id: ");
-		int id = scan.nextInt();
-		return Excercise.loadById(conn, id);
+		return Input.getInt();
 	}
 
-	public static Excercise getExcercise(Scanner scan) {
+	public static Excercise getExcercise() {
 		System.out.print("Insert title: ");
-		String title = scan.next();
+		String title = Input.get();
 		System.out.print("Insert description: ");
-		String description = scan.next();
-
+		String description = Input.getLine();
 		return new Excercise(title, description);
 	}
 
-	public static Solution getSolutionById(Connection conn, Scanner scan) throws SQLException {
+	public static int getSolutionId() {
 		System.out.print("Insert solution id: ");
-		int id = scan.nextInt();
-		return Solution.loadById(conn, id);
+		return Input.getInt();
 	}
 
-	public static String getSolutionDescription(Scanner scan) {
-		System.out.print("Insert your solution: ");
-		String desc = scan.next();
-		return desc;
-	}
 }

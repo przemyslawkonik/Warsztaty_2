@@ -2,7 +2,6 @@ package app;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Scanner;
 
 import db.DbUtil;
 import io.Input;
@@ -11,31 +10,31 @@ import model.Group;
 
 public class GroupApp {
 	public static void main(String[] args) {
-		try (Connection conn = DbUtil.getConn(); Scanner scan = new Scanner(System.in)) {
+		try (Connection conn = DbUtil.getConn()) {
 			while (true) {
-				System.out.println("List of groups (id, name):");
-				Output.printAllGroups(conn);
+				System.out.println("List of groups (id, name):\n");
+				Output.printGroups(Group.loadAll(conn));
 				System.out.print("\nAvaliable options (add, edit, delete, quit): ");
 
-				switch (scan.next()) {
+				switch (Input.get()) {
 				case "add": {
 					System.out.println("\nAdd group menu");
-					Group g = Input.getGroup(scan);
+					Group g = Input.getGroup();
 					g.save(conn);
 					System.out.println("\nGroup has been added succesfully!");
 					break;
 				}
 				case "edit": {
 					System.out.println("\nEdit group menu");
-					Group g = Input.getGroupById(conn, scan);
-					g.copy(Input.getGroup(scan));
+					Group g = Group.loadById(conn, Input.getGroupId());
+					g.copy(Input.getGroup());
 					g.save(conn);
 					System.out.println("\nGroup has been edited succesfully!");
 					break;
 				}
 				case "delete": {
 					System.out.println("\nDelete group menu");
-					Group g = Input.getGroupById(conn, scan);
+					Group g = Group.loadById(conn, Input.getGroupId());
 					g.delete(conn);
 					System.out.println("\nGroup has been deleted succesfully!");
 					break;

@@ -39,6 +39,17 @@ public class Solution {
 		rs.close();
 		return solutions;
 	}
+	
+	public static List<Solution> loadAllUnresolvedByUserId(Connection conn, long userId) throws SQLException {
+		List<Solution> solutions = loadAllByUserId(conn, userId);
+		List<Solution> unresolved = new ArrayList<>();
+		for(Solution s : solutions) {
+			if(s.getDescription() == null) {
+				unresolved.add(s);
+			}
+		}
+		return unresolved;
+	}
 
 	public static List<Solution> loadAllByExcerciseId(Connection conn, int excerciseId) throws SQLException {
 		PreparedStatement ps = conn.prepareStatement(Query.selectAllSolutionsByExcerciseId());

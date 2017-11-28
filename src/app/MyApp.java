@@ -2,7 +2,7 @@ package app;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Scanner;
+import java.util.List;
 
 import db.DbUtil;
 import io.Input;
@@ -13,7 +13,7 @@ import tool.MyDate;
 
 public class MyApp {
 	public static void main(String[] args) {
-		try (Connection conn = DbUtil.getConn(); Scanner scan = new Scanner(System.in)) {
+		try (Connection conn = DbUtil.getConn()) {
 			User u = null;
 			if (args.length > 0) {
 				u = User.loadById(conn, Long.parseLong(args[0]));
@@ -25,14 +25,15 @@ public class MyApp {
 			while (true) {
 				System.out.print("\nAvaliable options (add, view, quit):");
 
-				switch (scan.next()) {
+				switch (Input.get()) {
 				case "add": {
 					System.out.println("\nAll of " + u.getUsername()
 							+ " unresolved solutions (id, created, updated, description, excercise_id, users_id):");
-					int i = Output.printAllUnresolvedSolutionByUserId(conn, u.getId());
-					if (i > 0) {
-						Solution s = Input.getSolutionById(conn, scan);
-						String desc = Input.getSolutionDescription(scan);
+					List<Solution> unresolved = Solution.loadAllUnresolvedByUserId(conn, u.getId());
+					if (unresolved.size() > 0) {
+						Output.printSolutions(unresolved);
+						Solution s = Solution.loadById(conn, Input.getSolutionId());
+						String desc = Input.getLine();
 						s.setDescription(desc);
 						s.setUpdated(MyDate.get());
 						s.save(conn);
@@ -42,7 +43,7 @@ public class MyApp {
 				case "view": {
 					System.out.println("\nAll of " + u.getUsername()
 							+ " solutions (id, created, updated, description, excercise_id, users_id):");
-					Output.printAllSolutionByUserId(conn, u.getId());
+					Output.printSolutions(Solution.loadAllByUserId(conn, u.getId()));
 					break;
 				}
 				case "quit": {
