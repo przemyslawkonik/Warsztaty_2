@@ -14,7 +14,7 @@ import tool.MyDate;
 
 public class MyApp {
 	public static void main(String[] args) {
-		try (Connection conn = getConnection(); Scanner scan = new Scanner(System.in)) {
+		try (Connection conn = DbUtil.getConn(); Scanner scan = new Scanner(System.in)) {
 			User u = null;
 			if (args.length > 0) {
 				u = User.loadById(conn, Long.parseLong(args[0]));
@@ -87,7 +87,4 @@ public class MyApp {
 		return desc;
 	}
 
-	private static Connection getConnection() throws SQLException {
-		return DriverManager.getConnection("jdbc:mysql://localhost:3306/warsztat2?useSSL=false", "root", "coderslab");
-	}
 }

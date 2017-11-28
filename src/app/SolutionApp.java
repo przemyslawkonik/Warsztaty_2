@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+import db.DbUtil;
 import model.Excercise;
 import model.Solution;
 import model.User;
@@ -12,7 +13,7 @@ import tool.MyDate;
 
 public class SolutionApp {
 	public static void main(String[] args) {
-		try (Connection conn = getConnection(); Scanner scan = new Scanner(System.in)) {
+		try (Connection conn = DbUtil.getConn(); Scanner scan = new Scanner(System.in)) {
 			while (true) {
 				System.out.print("Avaliable options (add, view, quit): ");
 
@@ -84,7 +85,4 @@ public class SolutionApp {
 		}
 	}
 
-	private static Connection getConnection() throws SQLException {
-		return DriverManager.getConnection("jdbc:mysql://localhost:3306/warsztat2?useSSL=false", "root", "coderslab");
-	}
 }
