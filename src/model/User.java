@@ -9,6 +9,10 @@ import java.util.List;
 
 import org.mindrot.jbcrypt.BCrypt;
 
+import db.Operation;
+import db.PsUtil;
+import db.Query;
+
 public class User {
 	private long id;
 	private String username;
@@ -27,74 +31,38 @@ public class User {
 	}
 
 	public static List<User> loadAll(Connection conn) throws SQLException {
-		List<User> users = new ArrayList<>();
-		String sql = "SELECT * FROM users";
-		PreparedStatement ps = conn.prepareStatement(sql);
+		PreparedStatement ps = conn.prepareStatement(Query.selectAllUsers());
 		ResultSet rs = ps.executeQuery();
-		while (rs.next()) {
-			User loadedUser = new User();
-			loadedUser.id = rs.getLong("id");
-			loadedUser.username = rs.getString("username");
-			loadedUser.email = rs.getString("email");
-			loadedUser.password = rs.getString("password");
-			loadedUser.userGroupId = rs.getInt("user_group_id");
-			users.add(loadedUser);
-		}
+		List<User> users = load(rs);
 		ps.close();
 		rs.close();
 		return users;
 	}
 
 	public static List<User> loadAllByGroupId(Connection conn, int userGroupId) throws SQLException {
-		List<User> users = new ArrayList<>();
-		String sql = "SELECT * FROM users WHERE user_group_id=?";
-		PreparedStatement ps = conn.prepareStatement(sql);
+		PreparedStatement ps = conn.prepareStatement(Query.selectAllUsersByGroupId());
 		ps.setInt(1, userGroupId);
 		ResultSet rs = ps.executeQuery();
-		while (rs.next()) {
-			User loadedUser = new User();
-			loadedUser.id = rs.getLong("id");
-			loadedUser.username = rs.getString("username");
-			loadedUser.email = rs.getString("email");
-			loadedUser.password = rs.getString("password");
-			loadedUser.userGroupId = rs.getInt("user_group_id");
-			users.add(loadedUser);
-		}
+		List<User> users = load(rs);
 		ps.close();
 		rs.close();
 		return users;
 	}
 
 	public static User loadById(Connection conn, long id) throws SQLException {
-		String sql = "SELECT * FROM users WHERE id=?";
-		PreparedStatement ps = conn.prepareStatement(sql);
+		PreparedStatement ps = conn.prepareStatement(Query.selectAllUsersById());
 		ps.setLong(1, id);
 		ResultSet rs = ps.executeQuery();
-		if (rs.next()) {
-			User loadedUser = new User();
-			loadedUser.id = rs.getLong("id");
-			loadedUser.username = rs.getString("username");
-			loadedUser.email = rs.getString("email");
-			loadedUser.password = rs.getString("password");
-			loadedUser.userGroupId = rs.getInt("user_group_id");
-			ps.close();
-			rs.close();
-			return loadedUser;
-		}
+		List<User> users = load(rs);
 		ps.close();
 		rs.close();
-		return null;
+		return users.get(0);
 	}
 
 	public void save(Connection conn) throws SQLException {
 		if (id == 0) {
-			String sql = "INSERT INTO users(username, email, password, user_group_id) VALUES(?, ?, ?, ?)";
-			String[] generatedColumns = { "id" };
-			PreparedStatement ps = conn.prepareStatement(sql, generatedColumns);
-			ps.setString(1, username);
-			ps.setString(2, email);
-			ps.setString(3, password);
-			ps.setInt(4, userGroupId);
+			PreparedStatement ps = conn.prepareStatement(Query.insertUser(), new String[] { "id" });
+			PsUtil.prepare(ps, Operation.INSERT, this);
 			ps.executeUpdate();
 			ResultSet rs = ps.getGeneratedKeys();
 			if (rs.next()) {
@@ -103,13 +71,8 @@ public class User {
 			rs.close();
 			ps.close();
 		} else {
-			String sql = "UPDATE users SET username=?, email=?, password=?, user_group_id=? WHERE id=?";
-			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setString(1, username);
-			ps.setString(2, email);
-			ps.setString(3, password);
-			ps.setInt(4, userGroupId);
-			ps.setLong(5, id);
+			PreparedStatement ps = conn.prepareStatement(Query.updateUser());
+			PsUtil.prepare(ps, Operation.UPDATE, this);
 			ps.executeUpdate();
 			ps.close();
 		}
@@ -117,9 +80,8 @@ public class User {
 
 	public void delete(Connection conn) throws SQLException {
 		if (id != 0) {
-			String sql = "DELETE FROM users WHERE id=?";
-			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setLong(1, id);
+			PreparedStatement ps = conn.prepareStatement(Query.deleteUser());
+			PsUtil.prepare(ps, Operation.DELETE, this);
 			ps.executeUpdate();
 			ps.close();
 			id = 0;
@@ -131,6 +93,20 @@ public class User {
 		this.email = user.email;
 		this.password = user.password;
 		this.userGroupId = user.userGroupId;
+	}
+
+	private static List<User> load(ResultSet rs) throws SQLException {
+		List<User> users = new ArrayList<>();
+		while (rs.next()) {
+			User u = new User();
+			u.id = rs.getLong("id");
+			u.username = rs.getString("username");
+			u.email = rs.getString("email");
+			u.password = rs.getString("password");
+			u.userGroupId = rs.getInt("user_group_id");
+			users.add(u);
+		}
+		return users;
 	}
 
 	public String getUsername() {
