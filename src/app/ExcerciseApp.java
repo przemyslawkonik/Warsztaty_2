@@ -19,22 +19,22 @@ public class ExcerciseApp {
 				switch (Input.get()) {
 				case "add": {
 					System.out.println("\nAdd excercise menu");
-					Excercise e = Input.getExcercise();
+					Excercise e = getExcercise();
 					e.save(conn);
 					System.out.println("\nExcercise has been added succesfully!");
 					break;
 				}
 				case "edit": {
 					System.out.println("\nEdit excercise menu");
-					Excercise e = Excercise.loadById(conn, Input.getExcerciseId());
-					e.copy(Input.getExcercise());
+					Excercise e = Excercise.loadById(conn, getExcerciseId());
+					e.copy(getExcercise());
 					e.save(conn);
 					System.out.println("\nExcercise has been edited succesfully!");
 					break;
 				}
 				case "delete": {
 					System.out.println("\nDelete excercise menu");
-					Excercise e = Excercise.loadById(conn, Input.getExcerciseId());
+					Excercise e = Excercise.loadById(conn, getExcerciseId());
 					e.delete(conn);
 					System.out.println("\nExcercise has been deleted succesfully!");
 					break;
@@ -50,4 +50,16 @@ public class ExcerciseApp {
 		}
 	}
 
+	public static Excercise getExcercise() {
+		System.out.print("Insert title: ");
+		String title = Input.get();
+		System.out.print("Insert description: ");
+		String description = Input.getLine();
+		return new Excercise(title, description);
+	}
+
+	public static int getExcerciseId() {
+		System.out.print("Insert excercise id: ");
+		return Input.getInt();
+	}
 }

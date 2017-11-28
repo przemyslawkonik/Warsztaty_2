@@ -22,11 +22,11 @@ public class SolutionApp {
 					System.out.println("\nAdd solution menu");
 					System.out.println("\nList of users (id, username, email, userGroupId):");
 					Output.printUsers(User.loadAll(conn));
-					User u = User.loadById(conn, Input.getUserId());
+					User u = User.loadById(conn, UserApp.getUserId());
 
 					System.out.println("\nList of excercises (id, title, description):");
 					Output.printExcercises(Excercise.loadAll(conn));
-					Excercise e = Excercise.loadById(conn, Input.getExcerciseId());
+					Excercise e = Excercise.loadById(conn, ExcerciseApp.getExcerciseId());
 
 					Solution s = new Solution(MyDate.get(), null, null, e.getId(), u.getId());
 					s.save(conn);
@@ -37,7 +37,7 @@ public class SolutionApp {
 					System.out.println("\nView solution menu");
 					System.out.println("\nList of users (id, username, email, userGroupId):");
 					Output.printUsers(User.loadAll(conn));
-					User u = User.loadById(conn, Input.getUserId());
+					User u = User.loadById(conn, UserApp.getUserId());
 					System.out.println("\nAll of " + u.getUsername()
 							+ " solutions (id, created, updated, description, excercise_id, users_id):");
 					Output.printSolutions(Solution.loadAllByUserId(conn, u.getId()));
@@ -52,6 +52,11 @@ public class SolutionApp {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	static int getSolutionId() {
+		System.out.print("Insert solution id: ");
+		return Input.getInt();
 	}
 
 }

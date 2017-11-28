@@ -68,10 +68,6 @@ public class Group {
 		}
 	}
 
-	public void copy(Group g) {
-		this.name = g.name;
-	}
-
 	private static List<Group> load(ResultSet rs) throws SQLException {
 		List<Group> groups = new ArrayList<>();
 		while (rs.next()) {
@@ -81,6 +77,10 @@ public class Group {
 			groups.add(g);
 		}
 		return groups;
+	}
+	
+	public void copy(Group g) {
+		this.name = g.name;
 	}
 
 	private void synchronizeId(ResultSet rs) throws SQLException {

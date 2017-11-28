@@ -19,22 +19,22 @@ public class GroupApp {
 				switch (Input.get()) {
 				case "add": {
 					System.out.println("\nAdd group menu");
-					Group g = Input.getGroup();
+					Group g = getGroup();
 					g.save(conn);
 					System.out.println("\nGroup has been added succesfully!");
 					break;
 				}
 				case "edit": {
 					System.out.println("\nEdit group menu");
-					Group g = Group.loadById(conn, Input.getGroupId());
-					g.copy(Input.getGroup());
+					Group g = Group.loadById(conn, getGroupId());
+					g.copy(getGroup());
 					g.save(conn);
 					System.out.println("\nGroup has been edited succesfully!");
 					break;
 				}
 				case "delete": {
 					System.out.println("\nDelete group menu");
-					Group g = Group.loadById(conn, Input.getGroupId());
+					Group g = Group.loadById(conn, getGroupId());
 					g.delete(conn);
 					System.out.println("\nGroup has been deleted succesfully!");
 					break;
@@ -48,6 +48,16 @@ public class GroupApp {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	static Group getGroup() {
+		System.out.print("Insert name: ");
+		return new Group(Input.get());
+	}
+
+	static int getGroupId() {
+		System.out.print("Insert group id: ");
+		return Input.getInt();
 	}
 
 }

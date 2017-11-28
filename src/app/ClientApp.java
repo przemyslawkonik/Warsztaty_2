@@ -11,13 +11,12 @@ import model.Solution;
 import model.User;
 import tool.MyDate;
 
-public class MyApp {
+public class ClientApp {
 	public static void main(String[] args) {
 		try (Connection conn = DbUtil.getConn()) {
-			User u = null;
-			if (args.length > 0) {
-				u = User.loadById(conn, Long.parseLong(args[0]));
-				System.out.println("Hello " + u.getUsername());
+			User u = checkUser(args, conn);
+			if (u != null) {
+				System.out.println("Witaj " + u.getUsername());
 			} else {
 				System.out.println("User doesn't exists");
 				return;
@@ -32,7 +31,7 @@ public class MyApp {
 					List<Solution> unresolved = Solution.loadAllUnresolvedByUserId(conn, u.getId());
 					if (unresolved.size() > 0) {
 						Output.printSolutions(unresolved);
-						Solution s = Solution.loadById(conn, Input.getSolutionId());
+						Solution s = Solution.loadById(conn, SolutionApp.getSolutionId());
 						String desc = Input.getLine();
 						s.setDescription(desc);
 						s.setUpdated(MyDate.get());
@@ -54,6 +53,13 @@ public class MyApp {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private static User checkUser(String[] args, Connection conn) throws SQLException {
+		if (args.length > 0) {
+			return User.loadById(conn, Long.parseLong(args[0]));
+		}
+		return null;
 	}
 
 }

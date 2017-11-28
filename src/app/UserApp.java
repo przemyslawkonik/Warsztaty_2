@@ -19,22 +19,22 @@ public class UserApp {
 				switch (Input.get()) {
 				case "add": {
 					System.out.println("\nAdd user menu");
-					User u = Input.getUser();
+					User u = getUser();
 					u.save(conn);
 					System.out.println("\nUser has been added succesfully!");
 					break;
 				}
 				case "edit": {
 					System.out.println("\nEdit user menu");
-					User u = User.loadById(conn, Input.getUserId());
-					u.copy(Input.getUser());
+					User u = User.loadById(conn, getUserId());
+					u.copy(getUser());
 					u.save(conn);
 					System.out.println("\nUser has been edited succesfully!");
 					break;
 				}
 				case "delete": {
 					System.out.println("\nDelete user menu");
-					User u = User.loadById(conn, Input.getUserId());
+					User u = User.loadById(conn, getUserId());
 					u.delete(conn);
 					System.out.println("\nUser has been deleted succesfully!");
 					break;
@@ -48,6 +48,23 @@ public class UserApp {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	static User getUser() {
+		System.out.print("Insert username: ");
+		String username = Input.get();
+		System.out.print("Insert email: ");
+		String email = Input.get();
+		System.out.print("Insert password: ");
+		String password = Input.get();
+		System.out.print("Insert user group id: ");
+		int userGroupId = Input.getInt();
+		return new User(username, email, password, userGroupId);
+	}
+
+	static long getUserId() {
+		System.out.print("Insert user id: ");
+		return Input.getLong();
 	}
 
 }
