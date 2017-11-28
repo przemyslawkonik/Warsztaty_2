@@ -8,6 +8,7 @@ import java.util.Scanner;
 import model.Excercise;
 import model.Solution;
 import model.User;
+import tool.MyDate;
 
 public class SolutionApp {
 	public static void main(String[] args) {
@@ -26,7 +27,7 @@ public class SolutionApp {
 					printAllExcercises(conn);
 					Excercise e = getExcerciseById(conn, scan);
 
-					Solution s = new Solution(e.getId(), u.getId());
+					Solution s = new Solution(MyDate.get(), null, null, e.getId(), u.getId());
 					s.save(conn);
 					System.out.println("\nSolution has been added succesfully!");
 					break;

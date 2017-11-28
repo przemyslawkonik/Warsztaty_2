@@ -18,11 +18,6 @@ public class Solution {
 	public Solution() {
 	}
 
-	public Solution(int excerciseId, long userId) {
-		this.excerciseId = excerciseId;
-		this.userId = userId;
-	}
-
 	public Solution(String created, String updated, String description, int excerciseId, long userId) {
 		this.created = created;
 		this.updated = updated;
@@ -117,14 +112,14 @@ public class Solution {
 
 	public void save(Connection conn) throws SQLException {
 		if (id == 0) {
-			String sql = "INSERT INTO solution(created, excercise_id, users_id) VALUES(default, ?, ?)";
+			String sql = "INSERT INTO solution(created, updated, description, excercise_id, users_id) VALUES(?, ?, ?, ?, ?)";
 			String[] generatedColumns = { "id" };
 			PreparedStatement ps = conn.prepareStatement(sql, generatedColumns);
-			// ps.setString(1, created);
-			// ps.setString(2, updated);
-			// ps.setString(3, description);
-			ps.setInt(1, excerciseId);
-			ps.setLong(2, userId);
+			ps.setString(1, created);
+			ps.setString(2, updated);
+			ps.setString(3, description);
+			ps.setInt(4, excerciseId);
+			ps.setLong(5, userId);
 			ps.executeUpdate();
 			ResultSet rs = ps.getGeneratedKeys();
 			if (rs.next()) {
@@ -133,7 +128,7 @@ public class Solution {
 			rs.close();
 			ps.close();
 		} else {
-			String sql = "UPDATE solution SET created=?, updated=?, description=?, excercise_id=?, users_id=? WHERE id=?";
+			String sql = "UPDATE solution SET created=?, updated=?, description=? excercise_id=?, user_id=? WHERE id=?";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setString(1, created);
 			ps.setString(2, updated);
