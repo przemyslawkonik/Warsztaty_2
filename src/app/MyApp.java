@@ -1,13 +1,10 @@
 package app;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.Scanner;
 
 import db.DbUtil;
-import model.Excercise;
 import model.Solution;
 import model.User;
 import tool.MyDate;
