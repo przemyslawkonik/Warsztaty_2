@@ -3,6 +3,7 @@ package db;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import model.Excercise;
 import model.Group;
 import model.User;
 
@@ -45,6 +46,26 @@ public class PsUtil {
 		}
 		case DELETE: {
 			ps.setInt(1, g.getId());
+			break;
+		}
+		}
+	}
+
+	public static void prepare(PreparedStatement ps, Operation o, Excercise e) throws SQLException {
+		switch (o) {
+		case INSERT: {
+			ps.setString(1, e.getTitle());
+			ps.setString(2, e.getDescription());
+			break;
+		}
+		case UPDATE: {
+			ps.setString(1, e.getTitle());
+			ps.setString(2, e.getDescription());
+			ps.setInt(3, e.getId());
+			break;
+		}
+		case DELETE: {
+			ps.setInt(1, e.getId());
 			break;
 		}
 		}
