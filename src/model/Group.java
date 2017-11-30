@@ -45,9 +45,8 @@ public class Group {
 			PreparedStatement ps = conn.prepareStatement(Query.insertGroup(), new String[] { "id" });
 			PsUtil.prepare(ps, Operation.INSERT, this);
 			ps.executeUpdate();
-			ResultSet rs = ps.getGeneratedKeys();
-			synchronizeId(rs);
-			DbUtil.closeAll(ps, rs);
+			id = PsUtil.synchronizeId(ps);
+			ps.close();
 		} else {
 			PreparedStatement ps = conn.prepareStatement(Query.updateGroup());
 			PsUtil.prepare(ps, Operation.UPDATE, this);
@@ -61,8 +60,8 @@ public class Group {
 			PreparedStatement ps = conn.prepareStatement(Query.deleteGroup());
 			PsUtil.prepare(ps, Operation.DELETE, this);
 			ps.executeUpdate();
+			id = PsUtil.synchronizeId(ps);
 			ps.close();
-			id = 0;
 		}
 	}
 
@@ -79,12 +78,6 @@ public class Group {
 	
 	public void copy(Group g) {
 		this.name = g.name;
-	}
-
-	private void synchronizeId(ResultSet rs) throws SQLException {
-		if (rs.next()) {
-			id = rs.getInt(1);
-		}
 	}
 
 	public String getName() {

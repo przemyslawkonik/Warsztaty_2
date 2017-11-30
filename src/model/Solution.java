@@ -82,9 +82,8 @@ public class Solution {
 			PreparedStatement ps = conn.prepareStatement(Query.insertSolution(), new String[] { "id" });
 			PsUtil.prepare(ps, Operation.INSERT, this);
 			ps.executeUpdate();
-			ResultSet rs = ps.getGeneratedKeys();
-			synchronizeId(rs);
-			DbUtil.closeAll(ps, rs);
+			id = PsUtil.synchronizeId(ps);
+			ps.close();
 		} else {
 			PreparedStatement ps = conn.prepareStatement(Query.updateSolution());
 			PsUtil.prepare(ps, Operation.UPDATE, this);
@@ -98,8 +97,8 @@ public class Solution {
 			PreparedStatement ps = conn.prepareStatement(Query.deleteSolution());
 			PsUtil.prepare(ps, Operation.DELETE, this);
 			ps.executeUpdate();
+			id = PsUtil.synchronizeId(ps);
 			ps.close();
-			id = 0;
 		}
 	}
 
@@ -116,12 +115,6 @@ public class Solution {
 			solutions.add(s);
 		}
 		return solutions;
-	}
-
-	private void synchronizeId(ResultSet rs) throws SQLException {
-		if (rs.next()) {
-			id = rs.getInt(1);
-		}
 	}
 
 	public String getCreated() {

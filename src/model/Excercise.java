@@ -47,9 +47,8 @@ public class Excercise {
 			PreparedStatement ps = conn.prepareStatement(Query.insertExcercise(), new String[] { "id" });
 			PsUtil.prepare(ps, Operation.INSERT, this);
 			ps.executeUpdate();
-			ResultSet rs = ps.getGeneratedKeys();
-			synchronizeId(rs);
-			DbUtil.closeAll(ps, rs);
+			id = PsUtil.synchronizeId(ps);
+			ps.close();
 		} else {
 			PreparedStatement ps = conn.prepareStatement(Query.updateExcercise());
 			PsUtil.prepare(ps, Operation.UPDATE, this);
@@ -63,8 +62,8 @@ public class Excercise {
 			PreparedStatement ps = conn.prepareStatement(Query.deleteExcercise());
 			PsUtil.prepare(ps, Operation.DELETE, this);
 			ps.executeUpdate();
+			id = PsUtil.synchronizeId(ps);
 			ps.close();
-			id = 0;
 		}
 	}
 
@@ -83,12 +82,6 @@ public class Excercise {
 			excercises.add(e);
 		}
 		return excercises;
-	}
-
-	private void synchronizeId(ResultSet rs) throws SQLException {
-		if (rs.next()) {
-			id = rs.getInt(1);
-		}
 	}
 
 	public String getTitle() {
